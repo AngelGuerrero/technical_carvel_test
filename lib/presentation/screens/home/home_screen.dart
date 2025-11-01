@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:url_launcher/url_launcher.dart';
 import '../../providers/items_provider.dart';
 import '../../providers/search_provider.dart';
 import 'widgets/item_card.dart';
@@ -56,6 +57,17 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
     );
   }
 
+  Future<void> _launchPortfolio() async {
+    final uri = Uri.parse('https://angelguerrero.vercel.app/');
+    if (!await launchUrl(uri, mode: LaunchMode.externalApplication)) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Could not open portfolio')),
+        );
+      }
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final itemsState = ref.watch(itemsProvider);
@@ -65,11 +77,20 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
       appBar: AppBar(
         title: const Text(AppConstants.appName),
       ),
-      body: Column(
+      body: Stack(
         children: [
-          const CustomSearchBar(),
-          Expanded(
-            child: _buildContent(itemsState, searchState),
+          Column(
+            children: [
+              const CustomSearchBar(),
+              Expanded(child: _buildContent(itemsState, searchState)),
+              const SizedBox(height: 48),
+            ],
+          ),
+          Positioned(
+            left: 0,
+            right: 0,
+            bottom: 0,
+            child: _buildFooter(context),
           ),
         ],
       ),
@@ -79,6 +100,48 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
               child: const Icon(Icons.arrow_upward),
             )
           : null,
+    );
+  }
+
+  Widget _buildFooter(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.symmetric(vertical: 12),
+      decoration: BoxDecoration(
+        color: Theme.of(context).colorScheme.surface,
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withValues(alpha: 0.1),
+            blurRadius: 8,
+            offset: const Offset(0, -2),
+          ),
+        ],
+      ),
+      child: Center(
+        child: GestureDetector(
+          onTap: _launchPortfolio,
+          child: Text.rich(
+            TextSpan(
+              children: [
+                TextSpan(
+                  text: 'Creado por ',
+                  style: Theme.of(
+                    context,
+                  ).textTheme.bodySmall?.copyWith(color: Colors.grey[600]),
+                ),
+                TextSpan(
+                  text: 'Ángel Guerrero',
+                  style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                    color: Theme.of(context).colorScheme.primary,
+                    fontWeight: FontWeight.bold,
+                    decoration: TextDecoration.underline,
+                  ),
+                ),
+                const TextSpan(text: ' ❤'),
+              ],
+            ),
+          ),
+        ),
+      ),
     );
   }
 
