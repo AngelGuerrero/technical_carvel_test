@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../data/models/item_model.dart';
 import '../../data/repositories/item_repository.dart';
 import '../../core/constants/app_constants.dart';
+import '../../core/network/api_exception.dart';
 import 'items_provider.dart';
 
 class SearchState {
@@ -71,7 +72,7 @@ class SearchNotifier extends StateNotifier<SearchState> {
     } catch (e) {
       state = state.copyWith(
         isSearching: false,
-        error: e.toString(),
+        error: e is ApiException ? e.message : e.toString(),
       );
     }
   }

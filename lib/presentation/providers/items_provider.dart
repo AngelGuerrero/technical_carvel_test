@@ -4,6 +4,7 @@ import '../../data/datasources/api_datasource.dart';
 import '../../data/repositories/item_repository.dart';
 import '../../data/models/item_model.dart';
 import '../../core/constants/app_constants.dart';
+import '../../core/network/api_exception.dart';
 
 final apiClientProvider = Provider<ApiClient>((ref) {
   return ApiClient();
@@ -80,7 +81,7 @@ class ItemsNotifier extends StateNotifier<ItemsState> {
     } catch (e) {
       state = state.copyWith(
         isLoading: false,
-        error: e.toString(),
+        error: e is ApiException ? e.message : e.toString(),
       );
     }
   }
@@ -106,7 +107,7 @@ class ItemsNotifier extends StateNotifier<ItemsState> {
     } catch (e) {
       state = state.copyWith(
         isLoadingMore: false,
-        error: e.toString(),
+        error: e is ApiException ? e.message : e.toString(),
       );
     }
   }
