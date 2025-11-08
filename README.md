@@ -42,6 +42,16 @@ lib/
 - Dart SDK
 - An IDE (VS Code, Android Studio, or IntelliJ)
 
+## App Screenshots
+
+Here are some screenshots of the app in action:
+
+### Home Screen with Item List
+![Home Screen](docs/Screenshot_2025-11-07-23-36-50-565_com.example.carvel_home_assessment.jpg)
+
+### Item Details Screen
+![Details Screen](docs/Screenshot_2025-11-07-23-37-08-692_com.example.carvel_home_assessment.jpg)
+
 ### Installation
 
 1. Clone the repository
